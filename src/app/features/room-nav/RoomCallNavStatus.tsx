@@ -77,7 +77,7 @@ export function CallNavStatus() {
           }
         >
           {(triggerRef) => (
-            <IconButton variant="Background" ref={triggerRef} onClick={hangUp}>
+            <IconButton variant="Background" ref={triggerRef} onClick={() => hangUp(activeCallRoomId!)}>
               <Icon src={Icons.Phone} />
             </IconButton>
           )}
@@ -103,7 +103,7 @@ export function CallNavStatus() {
                 ref={triggerRef}
               >
                 <Text style={{ flexGrow: 1 }} size="B400" truncate>
-                  {mx.getRoom(activeCallRoomId)?.name}
+                  {mx.getRoom(activeCallRoomId ?? undefined)?.name}
                 </Text>
               </Chip>
             )}

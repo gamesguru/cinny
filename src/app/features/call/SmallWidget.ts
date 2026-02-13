@@ -77,6 +77,8 @@ export interface IApp extends IWidget {
   eventId?: string;
   avatar_url?: string;
   'io.element.managed_hybrid'?: boolean;
+  sender?: string;
+  content?: any;
 }
 
 export class SmallWidget extends EventEmitter {
@@ -90,7 +92,7 @@ export class SmallWidget extends EventEmitter {
 
   public url?: string;
 
-  public iframe: HTMLElement | null;
+  public iframe: HTMLIFrameElement | null = null;
 
   private type: string; // Type of the widget (e.g., 'm.call')
 

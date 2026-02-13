@@ -18,8 +18,8 @@ interface PersistentCallContainerProps {
   children: ReactNode;
 }
 
-export const PrimaryRefContext = createContext(null);
-export const BackupRefContext = createContext(null);
+export const PrimaryRefContext = createContext<React.MutableRefObject<HTMLIFrameElement | null> | null>(null);
+export const BackupRefContext = createContext<React.MutableRefObject<HTMLIFrameElement | null> | null>(null);
 
 export function PersistentCallContainer({ children }: PersistentCallContainerProps) {
   const primaryIframeRef = useRef<HTMLIFrameElement | null>(null);
@@ -53,10 +53,10 @@ export function PersistentCallContainer({ children }: PersistentCallContainerPro
 
   const setupWidget = useCallback(
     (
-      widgetApiRef: { current: ClientWidgetApi },
-      smallWidgetRef: { current: SmallWidget },
-      iframeRef: { current: { src: string } },
-      skipLobby: { toString: () => any }
+      widgetApiRef: React.MutableRefObject<ClientWidgetApi | null>,
+      smallWidgetRef: React.MutableRefObject<SmallWidget | null>,
+      iframeRef: React.MutableRefObject<HTMLIFrameElement | null>,
+      skipLobby: boolean
     ) => {
       if (mx?.getUserId()) {
         if (

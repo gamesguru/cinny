@@ -9,7 +9,7 @@ import { useCallState } from '../../pages/client/call/CallProvider';
 import { getMxIdLocalPart } from '../../utils/matrix';
 import { getMemberAvatarMxc, getMemberDisplayName } from '../../utils/room';
 import { useMediaAuthentication } from '../../hooks/useMediaAuthentication';
-import { openProfileViewer } from '../../../client/action/navigation';
+import { useOpenUserRoomProfile } from '../../state/hooks/userRoomProfile';
 
 type RoomNavUserProps = {
   room: Room;
@@ -18,6 +18,7 @@ type RoomNavUserProps = {
 export function RoomNavUser({ room, callMembership }: RoomNavUserProps) {
   const mx = useMatrixClient();
   const useAuthentication = useMediaAuthentication();
+  const openUserRoomProfile = useOpenUserRoomProfile();
   const { isCallActive, activeCallRoomId } = useCallState();
   const isActiveCall = isCallActive && activeCallRoomId === room.roomId;
   const userId = callMembership.sender ?? '';
@@ -28,8 +29,8 @@ export function RoomNavUser({ room, callMembership }: RoomNavUserProps) {
   const getName = getMemberDisplayName(room, userId) ?? getMxIdLocalPart(userId);
   const isCallParticipant = isActiveCall && userId !== mx.getUserId();
 
-  const handleNavUserClick = () => {
-    openProfileViewer(userId, room.roomId);
+  const handleNavUserClick: React.MouseEventHandler<HTMLButtonElement> = (evt) => {
+    openUserRoomProfile(room.roomId, undefined, userId, evt.currentTarget.getBoundingClientRect(), 'Right');
   };
 
   const ariaLabel = isCallParticipant ? `Call Participant: ${getName}` : getName;

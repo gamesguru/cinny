@@ -9,10 +9,11 @@ import { useEffect, useState } from 'react';
 export const useCallMembers = (mx: MatrixClient, roomId: string): CallMembership[] => {
   const [memberships, setMemberships] = useState<CallMembership[]>([]);
   const room = mx.getRoom(roomId);
-  const mxr = mx.matrixRTC.getRoomSession(room);
+  const mxr = room ? mx.matrixRTC.getRoomSession(room) : undefined;
   useEffect(() => {
+    if (!room || !mxr) return;
     const updateMemberships = () => {
-      if (!room?.isCallRoom()) return;
+      if (!room.isCallRoom()) return;
       setMemberships(MatrixRTCSession.callMembershipsForRoom(room));
     };
 

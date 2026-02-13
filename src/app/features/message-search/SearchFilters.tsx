@@ -275,7 +275,7 @@ function SelectRoomButton({ roomList, selectedRooms, onChange }: SelectRoomButto
                               <Icon
                                 size="50"
                                 src={
-                                  joinRuleToIconSrc(Icons, room.getJoinRule(), false) ?? Icons.Hash
+                                  joinRuleToIconSrc(Icons, room.getJoinRule(), false, false) ?? Icons.Hash
                                 }
                               />
                             }
@@ -394,7 +394,7 @@ export function SearchFilters({
               before={
                 <Icon
                   size="50"
-                  src={joinRuleToIconSrc(Icons, room.getJoinRule(), false) ?? Icons.Hash}
+                  src={joinRuleToIconSrc(Icons, room.getJoinRule(), false, false) ?? Icons.Hash}
                 />
               }
               after={<Icon size="50" src={Icons.Cross} />}

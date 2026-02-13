@@ -217,11 +217,10 @@ export function CallProvider({ children }: CallProviderProps) {
         activeClientWidgetApi?.transport.send(`${WIDGET_HANGUP_ACTION}`, {});
       } else if (activeClientWidget) {
         logger.debug('3 Hangup');
-        const iframeDoc =
-          activeClientWidget?.iframe?.contentDocument ||
-          activeClientWidget?.iframe?.contentWindow.document;
-        const button = iframeDoc.querySelector('[data-testid="incall_leave"]');
-        button.click();
+        const iframe = activeClientWidget?.iframe;
+        const iframeDoc = iframe?.contentDocument || iframe?.contentWindow?.document;
+        const button = iframeDoc?.querySelector<HTMLElement>('[data-testid="incall_leave"]');
+        if (button) button.click();
       }
       setIsCallActive(false);
 
@@ -310,11 +309,10 @@ export function CallProvider({ children }: CallProviderProps) {
         setActiveClientWidgetApi(viewedClientWidgetApi, viewedClientWidget, viewedCallRoomId);
         setActiveCallRoomIdState(viewedCallRoomId);
         setIsCallActive(true);
-        const iframeDoc =
-          viewedClientWidget?.iframe?.contentDocument ||
-          viewedClientWidget?.iframe?.contentWindow.document;
+        const iframe = viewedClientWidget?.iframe;
+        const iframeDoc = iframe?.contentDocument || iframe?.contentWindow?.document;
         const observer = new MutationObserver(() => {
-          const button = iframeDoc.querySelector('[data-testid="incall_leave"]');
+          const button = iframeDoc?.querySelector<HTMLElement>('[data-testid="incall_leave"]');
           if (button) {
             button.addEventListener('click', () => {
               setIsCallActive(false);
@@ -322,16 +320,15 @@ export function CallProvider({ children }: CallProviderProps) {
           }
           observer.disconnect();
         });
-        observer.observe(iframeDoc, { childList: true, subtree: true });
+        if (iframeDoc) observer.observe(iframeDoc, { childList: true, subtree: true });
       };
 
       if (ev.detail.widgetId === activeClientWidgetApi?.widget.id) {
         activeClientWidgetApi?.transport.reply(ev.detail, {});
-        const iframeDoc =
-          activeClientWidget?.iframe?.contentDocument ||
-          activeClientWidget?.iframe?.contentWindow.document;
+        const iframe = activeClientWidget?.iframe;
+        const iframeDoc = iframe?.contentDocument || iframe?.contentWindow?.document;
         const observer = new MutationObserver(() => {
-          const button = iframeDoc.querySelector('[data-testid="incall_leave"]');
+          const button = iframeDoc?.querySelector<HTMLElement>('[data-testid="incall_leave"]');
           if (button) {
             button.addEventListener('click', () => {
               setIsCallActive(false);
@@ -340,7 +337,7 @@ export function CallProvider({ children }: CallProviderProps) {
           observer.disconnect();
         });
         logger.debug('1 Join');
-        observer.observe(iframeDoc, { childList: true, subtree: true });
+        if (iframeDoc) observer.observe(iframeDoc, { childList: true, subtree: true });
         setIsCallActive(true);
         return;
       }
@@ -428,7 +425,7 @@ export function CallProvider({ children }: CallProviderProps) {
         `CallContext: Sending action '${action}' via active clientWidgetApi (room: ${activeClientWidgetApiRoomId}) with data:`,
         data
       );
-      await activeClientWidgetApi.transport.send(action as WidgetApiAction, data);
+      await activeClientWidgetApi.transport.send(action as WidgetApiAction, data as any);
     },
     [activeClientWidgetApi, activeCallRoomId, activeClientWidgetApiRoomId]
   );

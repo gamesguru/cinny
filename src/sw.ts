@@ -1,7 +1,10 @@
-/// <reference lib="WebWorker" />
+/// <reference lib="webworker" />
+
+import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
 
 export type {};
 declare const self: ServiceWorkerGlobalScope;
+declare const clients: Clients;
 
 async function askForAccessToken(client: Client): Promise<string | undefined> {
   return new Promise((resolve) => {
